@@ -1,5 +1,5 @@
 from models import *
-import chess, chess.pgn
+import os, chess, chess.pgn
 import json
 from collections import defaultdict
 from datetime import datetime
@@ -147,7 +147,7 @@ def a1(working_set, report_name):
     if excluded:
         print(f'Skipping {excluded} games that haven\'t been pre-processed')
 
-    out_path = f'reports/report-a1--{datetime.now():%Y-%m-%d--%H-%M-%S}--{report_name}.txt'
+    out_path = os.path.join('reports', f'report-a1--{datetime.now():%Y-%m-%d--%H-%M-%S}--{report_name}.txt')
     with open(out_path, 'w') as fout:
         fout.write('------ BY PLAYER ------\n\n')
         for player, result in sorted(by_player.items(), key=lambda i: i[1].t3_sort):
@@ -181,7 +181,7 @@ def a1csv(working_set, report_name):
     if excluded:
         print(f'Skipping {excluded} games that haven\'t been pre-processed')
 
-    out_path = f'reports/report-a1--{datetime.now():%Y-%m-%d--%H-%M-%S}--{report_name}.csv'
+    out_path = os.path.join('reports', f'report-a1--{datetime.now():%Y-%m-%d--%H-%M-%S}--{report_name}.csv')
     with open(out_path, 'w') as fout:
         cp_loss_name_string = ''
         for cp_loss_name in _cp_loss_names:
@@ -257,7 +257,7 @@ def a1_game(p, by_player, by_game, game_obj, pgn, color, player):
     by_game[(player, game_obj.id)].add(r)
 
 def load_a1_params():
-    with open('./config/params_for_a1.json') as config_f:
+    with open(os.path.join('config', 'params_for_a1.json')) as config_f:
         return json.load(config_f)
 
 def wilson_interval(ns, n):
