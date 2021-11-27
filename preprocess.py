@@ -161,5 +161,8 @@ def load_engine_config():
         return json.load(config_f)
 
 def init_engine(config):
-    engine = chess.engine.SimpleEngine.popen_uci(config['path'])
+    path = Path(config['path'])
+    if not path.is_absolute():
+        path = Path(__file__).parent / path
+    engine = chess.engine.SimpleEngine.popen_uci(path)
     return engine
