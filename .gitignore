@@ -4,3 +4,5 @@ reports/report*
 db/*.sqlite3
 engine/
 *.pyc
+/.venv
+/cr_env
