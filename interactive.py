@@ -2,9 +2,16 @@
 ChessReanalysis v0.1
 """
 
-import glob, os, re
+import glob
+import os
+import re
+import sys
+from pathlib import Path
+
 import chess.pgn
-import preprocess, analyze
+
+import analyze
+import preprocess
 
 working_set = {}
 
@@ -94,5 +101,14 @@ def mainloop():
         if i == '0':
             return
 
+
+def automatedCR(inpath: str, outpath: str):
+    working_set.clear()
+    addpgn(inpath)
+    preprocess.run(working_set)
+    analyze.a1(working_set, outpath)
+
+
 if __name__ == "__main__":
-    mainloop()
+    # mainloop()
+    automatedCR(*sys.argv[1:])

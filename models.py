@@ -1,6 +1,7 @@
 from peewee import *
+from pathlib import Path
 
-db = SqliteDatabase('./db/data.sqlite3')
+db = SqliteDatabase(Path(__file__).parent / 'db' / 'data.sqlite3')
 
 class Player(Model):
     username = CharField(unique=True)

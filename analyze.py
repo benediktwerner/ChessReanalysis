@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import datetime
 from operator import eq, lt
 from functools import partial
+from pathlib import Path
 import math
 
 # TODO: Make this configurable via the config file.
@@ -130,7 +131,7 @@ def t_output_csv(fout, result):
         for cp_loss_name in _cp_loss_names:
             fout.write(',,,,,,,,,,,,,,,,,,,,,,,,')
 
-def a1(working_set, report_name):
+def a1(working_set, outpath):
     p = load_a1_params()
     by_player = defaultdict(PgnSpyResult)
     by_game = defaultdict(PgnSpyResult)
@@ -147,8 +148,7 @@ def a1(working_set, report_name):
     if excluded:
         print(f'Skipping {excluded} games that haven\'t been pre-processed')
 
-    out_path = os.path.join('reports', f'report-a1--{datetime.now():%Y-%m-%d--%H-%M-%S}--{report_name}.txt')
-    with open(out_path, 'w') as fout:
+    with open(outpath, 'w') as fout:
         fout.write('------ BY PLAYER ------\n\n')
         for player, result in sorted(by_player.items(), key=lambda i: i[1].t3_sort):
             fout.write(f'{player.username} ({result.min_rating} - {result.max_rating})\n')
@@ -162,7 +162,7 @@ def a1(working_set, report_name):
             t_output(fout, result)
             fout.write(' '.join(result.game_list) + '\n')
             fout.write('\n')
-    print(f'Wrote report on {included} games to "{out_path}"')
+    print(f'Wrote report on {included} games to "{outpath}"')
 
 def a1csv(working_set, report_name):
     p = load_a1_params()
@@ -257,7 +257,7 @@ def a1_game(p, by_player, by_game, game_obj, pgn, color, player):
     by_game[(player, game_obj.id)].add(r)
 
 def load_a1_params():
-    with open(os.path.join('config', 'params_for_a1.json')) as config_f:
+    with open(Path(__file__).parent / 'config' / 'params_for_a1.json') as config_f:
         return json.load(config_f)
 
 def wilson_interval(ns, n):

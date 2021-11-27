@@ -3,6 +3,7 @@ import chess, chess.pgn, chess.engine
 import json
 import tqdm
 from multiprocessing import Pool, Process, Manager
+from pathlib import Path
 
 import sys
 
@@ -156,7 +157,7 @@ def score_to_cp(score):
     return min(max(score.relative.score(), -29000), 29000)
 
 def load_engine_config():
-    with open('./config/engine.json') as config_f:
+    with open(Path(__file__).parent / 'config' / 'engine.json') as config_f:
         return json.load(config_f)
 
 def init_engine(config):
